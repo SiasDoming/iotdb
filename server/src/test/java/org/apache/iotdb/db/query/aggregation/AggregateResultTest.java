@@ -25,6 +25,7 @@ import org.apache.iotdb.db.query.aggregation.impl.AvgAggrResult;
 import org.apache.iotdb.db.query.factory.AggregateResultFactory;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.apache.iotdb.tsfile.file.metadata.statistics.Statistics;
+import org.apache.iotdb.tsfile.read.common.BatchData;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -290,5 +291,42 @@ public class AggregateResultTest {
     ByteBuffer byteBuffer = ByteBuffer.wrap(outputStream.toByteArray());
     AggregateResult result = AggregateResult.deserializeFrom(byteBuffer);
     Assert.assertEquals(2d, (double) result.getResult(), 0.01);
+  }
+
+  @Test
+  public void varAggrResultTest() throws QueryProcessException, IOException {
+
+    AggregateResult varAggrResult =
+        AggregateResultFactory.getAggrResultByName(SQLConstant.VAR, TSDataType.DOUBLE, true);
+    BatchData dataBatch = new BatchData(TSDataType.DOUBLE);
+
+    dataBatch.putDouble(1L, 1.0);
+    dataBatch.putDouble(2L, 2.0);
+
+    varAggrResult.updateResultFromPageData(dataBatch);
+
+    Assert.assertEquals(0.25, varAggrResult.getResult());
+
+    AggregateResult varAggrResult1 =
+        AggregateResultFactory.getAggrResultByName(SQLConstant.VAR, TSDataType.DOUBLE, true);
+    AggregateResult varAggrResult2 =
+        AggregateResultFactory.getAggrResultByName(SQLConstant.VAR, TSDataType.DOUBLE, true);
+
+    Statistics statistics1 = Statistics.getStatsByType(TSDataType.DOUBLE);
+    Statistics statistics2 = Statistics.getStatsByType(TSDataType.DOUBLE);
+    statistics1.update(1L, 1.0);
+    statistics2.update(1L, 2.0);
+
+    varAggrResult1.updateResultFromStatistics(statistics1);
+    varAggrResult2.updateResultFromStatistics(statistics2);
+    varAggrResult1.merge(varAggrResult2);
+
+    Assert.assertEquals(0.25, varAggrResult1.getResult());
+
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    varAggrResult1.serializeTo(outputStream);
+    ByteBuffer byteBuffer = ByteBuffer.wrap(outputStream.toByteArray());
+    AggregateResult result = AggregateResult.deserializeFrom(byteBuffer);
+    Assert.assertEquals(0.25, result.getResult());
   }
 }

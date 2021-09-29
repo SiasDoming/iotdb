@@ -28,6 +28,7 @@ import org.apache.iotdb.db.qp.physical.crud.AggregationPlan;
 import org.apache.iotdb.db.query.aggregation.AggregateResult;
 import org.apache.iotdb.db.query.aggregation.AggregationType;
 import org.apache.iotdb.db.query.aggregation.impl.AvgAggrResult;
+import org.apache.iotdb.db.query.aggregation.impl.VarAggrResult;
 import org.apache.iotdb.db.query.factory.AggregateResultFactory;
 import org.apache.iotdb.tsfile.common.constant.TsFileConstant;
 import org.apache.iotdb.tsfile.exception.write.UnSupportedDataTypeException;
@@ -180,6 +181,9 @@ public class FilePathUtils {
         if (aggRet.getAggregationType().equals(AggregationType.AVG)) {
           ((AvgAggrResult) aggRet)
               .setAvgResult(dataType, newRecord.getFields().get(i).getDoubleV());
+        } else if (aggRet.getAggregationType().equals(AggregationType.VAR)) {
+          ((VarAggrResult) aggRet)
+              .setVarResult(dataType, newRecord.getFields().get(i).getDoubleV());
         } else {
           switch (dataType) {
             case TEXT:
