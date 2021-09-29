@@ -149,6 +149,7 @@ public class ValuePageWriterTest {
       assertEquals(1.0f, statistics.getMinValue(), 0.000001f);
       assertEquals(19.0f, statistics.getMaxValue(), 0.000001f);
       assertEquals(150.0f, (float) statistics.getSumDoubleValue(), 0.000001f);
+      assertEquals(1990.0d, statistics.getSquareSumDoubleValue(), 0.000001d);
 
       ByteBuffer buffer = ByteBuffer.wrap(publicBAOS.getBuf(), 0, publicBAOS.size());
 
@@ -186,8 +187,8 @@ public class ValuePageWriterTest {
       }
       // without page statistics
       assertEquals(0, pageWriter.writePageHeaderAndDataIntoBuff(publicBAOS, false));
-      // total size
-      assertEquals(110, publicBAOS.size());
+      // total size 69+49
+      assertEquals(118, publicBAOS.size());
       Statistics<Float> statistics = (Statistics<Float>) pageWriter.getStatistics();
       assertEquals(1L, statistics.getStartTime());
       assertEquals(19L, statistics.getEndTime());
@@ -197,6 +198,7 @@ public class ValuePageWriterTest {
       assertEquals(1.0f, statistics.getMinValue(), 0.000001f);
       assertEquals(19.0f, statistics.getMaxValue(), 0.000001f);
       assertEquals(150.0f, (float) statistics.getSumDoubleValue(), 0.000001f);
+      assertEquals(1990.0d, statistics.getSquareSumDoubleValue(), 0.000001d);
 
       ByteBuffer buffer = ByteBuffer.wrap(publicBAOS.getBuf(), 0, publicBAOS.size());
       // uncompressedSize
@@ -215,6 +217,7 @@ public class ValuePageWriterTest {
       assertEquals(1.0f, testStatistics.getMinValue(), 0.000001f);
       assertEquals(19.0f, testStatistics.getMaxValue(), 0.000001f);
       assertEquals(150.0f, (float) testStatistics.getSumDoubleValue(), 0.000001f);
+      assertEquals(1990.0d, statistics.getSquareSumDoubleValue(), 0.000001d);
 
       // bitmap
       assertEquals(20, ReadWriteIOUtils.readInt(buffer));
@@ -256,6 +259,7 @@ public class ValuePageWriterTest {
       assertEquals(1.0f, statistics.getMinValue(), 0.000001f);
       assertEquals(19.0f, statistics.getMaxValue(), 0.000001f);
       assertEquals(150.0f, (float) statistics.getSumDoubleValue(), 0.000001f);
+      assertEquals(1990.0d, statistics.getSquareSumDoubleValue(), 0.000001d);
 
       ByteBuffer buffer = ByteBuffer.wrap(publicBAOS.getBuf(), 0, publicBAOS.size());
 

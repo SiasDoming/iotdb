@@ -146,6 +146,10 @@ public abstract class Statistics<T> {
 
   public abstract long getSumLongValue();
 
+  public abstract double getSquareSumDoubleValue();
+
+  public abstract float getSquareSumFloatValue();
+
   public abstract byte[] getMinValueBytes();
 
   public abstract byte[] getMaxValueBytes();
@@ -156,6 +160,8 @@ public abstract class Statistics<T> {
 
   public abstract byte[] getSumValueBytes();
 
+  public abstract byte[] getSquareSumValueBytes();
+
   public abstract ByteBuffer getMinValueBuffer();
 
   public abstract ByteBuffer getMaxValueBuffer();
@@ -165,6 +171,8 @@ public abstract class Statistics<T> {
   public abstract ByteBuffer getLastValueBuffer();
 
   public abstract ByteBuffer getSumValueBuffer();
+
+  public abstract ByteBuffer getSquareSumValueBuffer();
 
   /**
    * merge parameter to this statistic

@@ -109,6 +109,18 @@ public class BinaryStatistics extends Statistics<Binary> {
   }
 
   @Override
+  public double getSquareSumDoubleValue() {
+    throw new StatisticsClassException(
+        String.format(BINARY_STATS_UNSUPPORTED_MSG, "float variance"));
+  }
+
+  @Override
+  public float getSquareSumFloatValue() {
+    throw new StatisticsClassException(
+        String.format(BINARY_STATS_UNSUPPORTED_MSG, "double variance"));
+  }
+
+  @Override
   protected void mergeStatisticsValue(Statistics stats) {
     BinaryStatistics stringStats = (BinaryStatistics) stats;
     if (isEmpty) {
@@ -171,6 +183,11 @@ public class BinaryStatistics extends Statistics<Binary> {
   }
 
   @Override
+  public byte[] getSquareSumValueBytes() {
+    throw new StatisticsClassException(String.format(BINARY_STATS_UNSUPPORTED_MSG, "squareSum"));
+  }
+
+  @Override
   public ByteBuffer getMinValueBuffer() {
     throw new StatisticsClassException(String.format(BINARY_STATS_UNSUPPORTED_MSG, "min"));
   }
@@ -193,6 +210,11 @@ public class BinaryStatistics extends Statistics<Binary> {
   @Override
   public ByteBuffer getSumValueBuffer() {
     throw new StatisticsClassException(String.format(BINARY_STATS_UNSUPPORTED_MSG, "sum"));
+  }
+
+  @Override
+  public ByteBuffer getSquareSumValueBuffer() {
+    throw new StatisticsClassException(String.format(BINARY_STATS_UNSUPPORTED_MSG, "squareSum"));
   }
 
   @Override

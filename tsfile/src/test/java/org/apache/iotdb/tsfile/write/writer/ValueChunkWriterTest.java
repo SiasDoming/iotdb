@@ -85,8 +85,8 @@ public class ValueChunkWriterTest {
       chunkWriter.write(time, (float) time, time % 4 == 0);
     }
     chunkWriter.sealCurrentPage();
-    // two pages with statistics size: (69 + 41) * 2 + chunk header size: 9
-    assertEquals(229L, chunkWriter.getCurrentChunkSize());
+    // two pages with statistics size: (69 + 49) * 2 + chunk header size: 9
+    assertEquals(245L, chunkWriter.getCurrentChunkSize());
 
     TestTsFileOutput testTsFileOutput = new TestTsFileOutput();
     TsFileIOWriter writer = new TsFileIOWriter(testTsFileOutput, true);
@@ -96,11 +96,11 @@ public class ValueChunkWriterTest {
       ByteBuffer buffer = ByteBuffer.wrap(publicBAOS.getBuf(), 0, publicBAOS.size());
       assertEquals(0x40 | MetaMarker.CHUNK_HEADER, ReadWriteIOUtils.readByte(buffer));
       assertEquals("s1", ReadWriteIOUtils.readVarIntString(buffer));
-      assertEquals(220, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
+      assertEquals(236, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
       assertEquals(TSDataType.FLOAT.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(CompressionType.UNCOMPRESSED.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(TSEncoding.PLAIN.serialize(), ReadWriteIOUtils.readByte(buffer));
-      assertEquals(220, buffer.remaining());
+      assertEquals(236, buffer.remaining());
     } catch (IOException e) {
       e.printStackTrace();
       fail();

@@ -39,6 +39,7 @@ public class DoubleStatisticsTest {
     assertEquals(2.32d + 1.34d, doubleStats.getSumDoubleValue(), maxError);
     assertEquals(1.34d, doubleStats.getFirstValue(), maxError);
     assertEquals(2.32d, doubleStats.getLastValue(), maxError);
+    assertEquals(7.178d, doubleStats.getSquareSumDoubleValue(), maxError);
   }
 
   @Test

@@ -133,6 +133,16 @@ public class BooleanStatistics extends Statistics<Boolean> {
   }
 
   @Override
+  public double getSquareSumDoubleValue() {
+    throw new StatisticsClassException("Boolean statistics does not support: double squareSum");
+  }
+
+  @Override
+  public float getSquareSumFloatValue() {
+    return sumValue;
+  }
+
+  @Override
   public ByteBuffer getMinValueBuffer() {
     throw new StatisticsClassException("Boolean statistics do not support: min");
   }
@@ -155,6 +165,11 @@ public class BooleanStatistics extends Statistics<Boolean> {
   @Override
   public ByteBuffer getSumValueBuffer() {
     return ReadWriteIOUtils.getByteBuffer(sumValue);
+  }
+
+  @Override
+  public ByteBuffer getSquareSumValueBuffer() {
+    throw new StatisticsClassException("Boolean statistics do not have: squareSum buffer");
   }
 
   @Override
@@ -196,6 +211,11 @@ public class BooleanStatistics extends Statistics<Boolean> {
   @Override
   public byte[] getSumValueBytes() {
     return BytesUtils.longToBytes(sumValue);
+  }
+
+  @Override
+  public byte[] getSquareSumValueBytes() {
+    throw new StatisticsClassException("Boolean statistics do not have: squareSum bytes");
   }
 
   @Override

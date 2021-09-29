@@ -20,8 +20,6 @@ package org.apache.iotdb.tsfile.v2.file.metadata.statistics;
 
 import org.apache.iotdb.tsfile.exception.write.UnknownColumnTypeException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-import org.apache.iotdb.tsfile.file.metadata.statistics.BooleanStatistics;
-import org.apache.iotdb.tsfile.file.metadata.statistics.IntegerStatistics;
 import org.apache.iotdb.tsfile.file.metadata.statistics.Statistics;
 import org.apache.iotdb.tsfile.utils.ReadWriteIOUtils;
 
@@ -42,19 +40,7 @@ public class StatisticsV2 {
     statistics.setEndTime(ReadWriteIOUtils.readLong(inputStream));
     switch (dataType) {
       case BOOLEAN:
-        boolean firstBool = ReadWriteIOUtils.readBool(inputStream);
-        boolean lastBool = ReadWriteIOUtils.readBool(inputStream);
-        ((BooleanStatistics) statistics).initializeStats(firstBool, lastBool, 0);
-        break;
       case INT32:
-        int minValue = ReadWriteIOUtils.readInt(inputStream);
-        int maxValue = ReadWriteIOUtils.readInt(inputStream);
-        int firstValue = ReadWriteIOUtils.readInt(inputStream);
-        int lastValue = ReadWriteIOUtils.readInt(inputStream);
-        long sumValue = (long) ReadWriteIOUtils.readDouble(inputStream);
-        ((IntegerStatistics) statistics)
-            .initializeStats(minValue, maxValue, firstValue, lastValue, sumValue);
-        break;
       case INT64:
       case TEXT:
       case DOUBLE:
@@ -76,19 +62,7 @@ public class StatisticsV2 {
     statistics.setEndTime(ReadWriteIOUtils.readLong(buffer));
     switch (dataType) {
       case BOOLEAN:
-        boolean firstBool = ReadWriteIOUtils.readBool(buffer);
-        boolean lastBool = ReadWriteIOUtils.readBool(buffer);
-        ((BooleanStatistics) statistics).initializeStats(firstBool, lastBool, 0);
-        break;
       case INT32:
-        int minValue = ReadWriteIOUtils.readInt(buffer);
-        int maxValue = ReadWriteIOUtils.readInt(buffer);
-        int firstValue = ReadWriteIOUtils.readInt(buffer);
-        int lastValue = ReadWriteIOUtils.readInt(buffer);
-        long sumValue = (long) ReadWriteIOUtils.readDouble(buffer);
-        ((IntegerStatistics) statistics)
-            .initializeStats(minValue, maxValue, firstValue, lastValue, sumValue);
-        break;
       case INT64:
       case TEXT:
       case DOUBLE:

@@ -125,10 +125,10 @@ public class VectorChunkWriterImplTest {
     chunkWriter.sealCurrentPage();
 
     // time chunk: 17 + (4 + 17 + 160) * 2
-    // value chunk 1: 20 + (2 + 41 + 4 + 3 + 80) * 2
-    // value chunk 2: 20 + (2 + 41 + 4 + 3 + 20) * 2
-    // value chunk 3: 20 + (4 + 57 + 4 + 3 + 160) * 2
-    assertEquals(1295, chunkWriter.getCurrentChunkSize());
+    // value chunk 1: 20 + (2 + 49 + 4 + 3 + 80) * 2
+    // value chunk 2: 20 + (2 + 45 + 4 + 3 + 20) * 2
+    // value chunk 3: 20 + (4 + 65 + 4 + 3 + 160) * 2
+    assertEquals(1335, chunkWriter.getCurrentChunkSize());
 
     try {
       TestTsFileOutput testTsFileOutput = new TestTsFileOutput();
@@ -148,29 +148,29 @@ public class VectorChunkWriterImplTest {
       // value chunk 1
       assertEquals(0x40 | MetaMarker.CHUNK_HEADER, ReadWriteIOUtils.readByte(buffer));
       assertEquals("vectorName.s1", ReadWriteIOUtils.readVarIntString(buffer));
-      assertEquals(260, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
+      assertEquals(276, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
       assertEquals(TSDataType.FLOAT.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(CompressionType.UNCOMPRESSED.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(TSEncoding.PLAIN.serialize(), ReadWriteIOUtils.readByte(buffer));
-      buffer.position(buffer.position() + 260);
+      buffer.position(buffer.position() + 276);
 
       // value chunk 2
       assertEquals(0x40 | MetaMarker.CHUNK_HEADER, ReadWriteIOUtils.readByte(buffer));
       assertEquals("vectorName.s2", ReadWriteIOUtils.readVarIntString(buffer));
-      assertEquals(140, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
+      assertEquals(148, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
       assertEquals(TSDataType.INT32.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(CompressionType.UNCOMPRESSED.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(TSEncoding.PLAIN.serialize(), ReadWriteIOUtils.readByte(buffer));
-      buffer.position(buffer.position() + 140);
+      buffer.position(buffer.position() + 148);
 
       // value chunk 2
       assertEquals(0x40 | MetaMarker.CHUNK_HEADER, ReadWriteIOUtils.readByte(buffer));
       assertEquals("vectorName.s3", ReadWriteIOUtils.readVarIntString(buffer));
-      assertEquals(456, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
+      assertEquals(472, ReadWriteForEncodingUtils.readUnsignedVarInt(buffer));
       assertEquals(TSDataType.DOUBLE.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(CompressionType.UNCOMPRESSED.serialize(), ReadWriteIOUtils.readByte(buffer));
       assertEquals(TSEncoding.PLAIN.serialize(), ReadWriteIOUtils.readByte(buffer));
-      assertEquals(456, buffer.remaining());
+      assertEquals(472, buffer.remaining());
 
     } catch (IOException e) {
       e.printStackTrace();

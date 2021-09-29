@@ -76,6 +76,16 @@ public class TimeStatistics extends Statistics {
   }
 
   @Override
+  public double getSquareSumDoubleValue() {
+    throw new StatisticsClassException("Time statistics does not support: float variance");
+  }
+
+  @Override
+  public float getSquareSumFloatValue() {
+    throw new StatisticsClassException("Time statistics does not support: double variance");
+  }
+
+  @Override
   void updateStats(long value) {
     throw new StatisticsClassException("Time statistics does not support: update stats");
   }
@@ -124,6 +134,11 @@ public class TimeStatistics extends Statistics {
   }
 
   @Override
+  public byte[] getSquareSumValueBytes() {
+    throw new StatisticsClassException("Time statistics does not support: variance");
+  }
+
+  @Override
   public ByteBuffer getMinValueBuffer() {
     throw new StatisticsClassException("Time statistics does not support: get min value bytes");
   }
@@ -146,6 +161,11 @@ public class TimeStatistics extends Statistics {
   @Override
   public ByteBuffer getSumValueBuffer() {
     throw new StatisticsClassException("Time statistics does not support: get sum value buffer");
+  }
+
+  @Override
+  public ByteBuffer getSquareSumValueBuffer() {
+    throw new StatisticsClassException("Time statistics does not support: variance");
   }
 
   @Override

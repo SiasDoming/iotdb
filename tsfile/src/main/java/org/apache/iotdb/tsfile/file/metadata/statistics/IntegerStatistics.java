@@ -36,8 +36,9 @@ public class IntegerStatistics extends Statistics<Integer> {
   private int firstValue;
   private int lastValue;
   private long sumValue;
+  private float squareSumValue;
 
-  static final int INTEGER_STATISTICS_FIXED_RAM_SIZE = 64;
+  static final int INTEGER_STATISTICS_FIXED_RAM_SIZE = 68;
 
   @Override
   public TSDataType getType() {
@@ -46,18 +47,20 @@ public class IntegerStatistics extends Statistics<Integer> {
 
   @Override
   public int getStatsSize() {
-    return 24;
+    return 28;
   }
 
-  public void initializeStats(int min, int max, int first, int last, long sum) {
+  public void initializeStats(int min, int max, int first, int last, long sum, float squareSum) {
     this.minValue = min;
     this.maxValue = max;
     this.firstValue = first;
     this.lastValue = last;
     this.sumValue = sum;
+    this.squareSumValue = squareSum;
   }
 
-  private void updateStats(int minValue, int maxValue, int lastValue, long sumValue) {
+  private void updateStats(
+      int minValue, int maxValue, int lastValue, long sumValue, float squareSumValue) {
     if (minValue < this.minValue) {
       this.minValue = minValue;
     }
@@ -65,6 +68,7 @@ public class IntegerStatistics extends Statistics<Integer> {
       this.maxValue = maxValue;
     }
     this.sumValue += sumValue;
+    this.squareSumValue += squareSumValue;
     this.lastValue = lastValue;
   }
 
@@ -74,6 +78,7 @@ public class IntegerStatistics extends Statistics<Integer> {
       int firstValue,
       int lastValue,
       long sumValue,
+      float squareSumValue,
       long startTime,
       long endTime) {
     if (minValue < this.minValue) {
@@ -83,6 +88,7 @@ public class IntegerStatistics extends Statistics<Integer> {
       this.maxValue = maxValue;
     }
     this.sumValue += sumValue;
+    this.squareSumValue += squareSumValue;
     // only if endTime greater or equals to the current endTime need we update the last value
     // only if startTime less or equals to the current startTime need we update the first value
     // otherwise, just ignore
@@ -103,10 +109,10 @@ public class IntegerStatistics extends Statistics<Integer> {
   @Override
   void updateStats(int value) {
     if (isEmpty) {
-      initializeStats(value, value, value, value, value);
+      initializeStats(value, value, value, value, value, value * value);
       isEmpty = false;
     } else {
-      updateStats(value, value, value, value);
+      updateStats(value, value, value, value, value * value);
     }
   }
 
@@ -153,6 +159,16 @@ public class IntegerStatistics extends Statistics<Integer> {
   }
 
   @Override
+  public double getSquareSumDoubleValue() {
+    throw new StatisticsClassException("Integer statistics does not support: double squareSum");
+  }
+
+  @Override
+  public float getSquareSumFloatValue() {
+    return squareSumValue;
+  }
+
+  @Override
   protected void mergeStatisticsValue(Statistics stats) {
     IntegerStatistics intStats = (IntegerStatistics) stats;
     if (isEmpty) {
@@ -161,7 +177,8 @@ public class IntegerStatistics extends Statistics<Integer> {
           intStats.getMaxValue(),
           intStats.getFirstValue(),
           intStats.getLastValue(),
-          intStats.sumValue);
+          intStats.getSumLongValue(),
+          intStats.getSquareSumFloatValue());
       isEmpty = false;
     } else {
       updateStats(
@@ -169,7 +186,8 @@ public class IntegerStatistics extends Statistics<Integer> {
           intStats.getMaxValue(),
           intStats.getFirstValue(),
           intStats.getLastValue(),
-          intStats.sumValue,
+          intStats.getSumLongValue(),
+          intStats.getSquareSumFloatValue(),
           stats.getStartTime(),
           stats.getEndTime());
     }
@@ -201,6 +219,11 @@ public class IntegerStatistics extends Statistics<Integer> {
   }
 
   @Override
+  public ByteBuffer getSquareSumValueBuffer() {
+    return ReadWriteIOUtils.getByteBuffer(squareSumValue);
+  }
+
+  @Override
   public byte[] getMinValueBytes() {
     return BytesUtils.intToBytes(minValue);
   }
@@ -226,6 +249,11 @@ public class IntegerStatistics extends Statistics<Integer> {
   }
 
   @Override
+  public byte[] getSquareSumValueBytes() {
+    return BytesUtils.floatToBytes(squareSumValue);
+  }
+
+  @Override
   public int serializeStats(OutputStream outputStream) throws IOException {
     int byteLen = 0;
     byteLen += ReadWriteIOUtils.write(minValue, outputStream);
@@ -233,6 +261,7 @@ public class IntegerStatistics extends Statistics<Integer> {
     byteLen += ReadWriteIOUtils.write(firstValue, outputStream);
     byteLen += ReadWriteIOUtils.write(lastValue, outputStream);
     byteLen += ReadWriteIOUtils.write(sumValue, outputStream);
+    byteLen += ReadWriteIOUtils.write(squareSumValue, outputStream);
     return byteLen;
   }
 
@@ -243,6 +272,7 @@ public class IntegerStatistics extends Statistics<Integer> {
     this.firstValue = ReadWriteIOUtils.readInt(inputStream);
     this.lastValue = ReadWriteIOUtils.readInt(inputStream);
     this.sumValue = ReadWriteIOUtils.readLong(inputStream);
+    this.squareSumValue = ReadWriteIOUtils.readFloat(inputStream);
   }
 
   @Override
@@ -252,6 +282,7 @@ public class IntegerStatistics extends Statistics<Integer> {
     this.firstValue = ReadWriteIOUtils.readInt(byteBuffer);
     this.lastValue = ReadWriteIOUtils.readInt(byteBuffer);
     this.sumValue = ReadWriteIOUtils.readLong(byteBuffer);
+    this.squareSumValue = ReadWriteIOUtils.readFloat(byteBuffer);
   }
 
   @Override
@@ -267,6 +298,8 @@ public class IntegerStatistics extends Statistics<Integer> {
         + lastValue
         + ",sumValue:"
         + sumValue
+        + ",squareSumValue:"
+        + squareSumValue
         + "]";
   }
 }

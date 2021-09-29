@@ -28,9 +28,9 @@ public class IntegerStatisticsTest {
   @Test
   public void testUpdate() {
     Statistics<Integer> intStats = new IntegerStatistics();
-    intStats.updateStats(1);
+    intStats.update(0, 1);
     assertFalse(intStats.isEmpty());
-    intStats.updateStats(2);
+    intStats.update(1, 2);
     assertFalse(intStats.isEmpty());
     assertEquals(2, (int) intStats.getMaxValue());
     assertEquals(1, (int) intStats.getMinValue());
@@ -61,6 +61,7 @@ public class IntegerStatisticsTest {
     assertEquals(1, (int) intStats3.getFirstValue());
     assertEquals(1 + 100, (int) intStats3.getSumLongValue());
     assertEquals(100, (int) intStats3.getLastValue());
+    assertEquals(10001d, intStats3.getSquareSumFloatValue(), 0.000001);
 
     intStats3.mergeStatistics(intStats2);
     assertEquals(200, (int) intStats3.getMaxValue());
@@ -68,6 +69,7 @@ public class IntegerStatisticsTest {
     assertEquals(1, (int) intStats3.getFirstValue());
     assertEquals(101 + 200, (int) intStats3.getSumLongValue());
     assertEquals(200, (int) intStats3.getLastValue());
+    assertEquals(50001d, intStats3.getSquareSumFloatValue(), 0.000001);
 
     // Unseq merge
     Statistics<Integer> intStats4 = new IntegerStatistics();
@@ -77,10 +79,10 @@ public class IntegerStatisticsTest {
     intStats5.setStartTime(1);
     intStats5.setEndTime(4);
 
-    intStats4.updateStats(11);
-    intStats4.updateStats(15);
+    intStats4.update(0, 11);
+    intStats4.update(5, 15);
 
-    intStats5.updateStats(20);
+    intStats5.update(1, 20);
 
     intStats3.mergeStatistics(intStats4);
     assertEquals(11, (int) intStats3.getFirstValue());
