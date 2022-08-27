@@ -268,7 +268,8 @@ public class AlignedChunkGroupWriterImpl implements IChunkGroupWriter {
     }
   }
 
-  private void sealAllChunks() {
+  @Override
+  public void sealAllChunks() {
     timeChunkWriter.sealCurrentPage();
     for (ValueChunkWriter valueChunkWriter : valueChunkWriterMap.values()) {
       valueChunkWriter.sealCurrentPage();

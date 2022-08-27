@@ -93,4 +93,7 @@ public interface IChunkGroupWriter {
    * @return the serialized size of current chunkGroup header + all chunk
    */
   long getCurrentChunkGroupSize();
+
+  /** seal all the chunks which may has un-sealed pages in force. */
+  void sealAllChunks();
 }

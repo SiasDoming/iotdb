@@ -454,7 +454,7 @@ public class TsFileWriter implements AutoCloseable {
     return schemas;
   }
 
-  private IChunkGroupWriter tryToInitialGroupWriter(String deviceId, boolean isAligned) {
+  public IChunkGroupWriter tryToInitialGroupWriter(String deviceId, boolean isAligned) {
     IChunkGroupWriter groupWriter;
     if (!groupWriters.containsKey(deviceId)) {
       if (isAligned) {
@@ -635,6 +635,19 @@ public class TsFileWriter implements AutoCloseable {
    */
   public TsFileIOWriter getIOWriter() {
     return this.fileWriter;
+  }
+
+  /**
+   * get internal chunk group writers.
+   *
+   * @return map device -> chunk group writer
+   */
+  public Map<String, IChunkGroupWriter> getGroupWriters() {
+    return this.groupWriters;
+  }
+
+  public long getRecordCount() {
+    return recordCount;
   }
 
   public void setIsUnseq(boolean unseq) {

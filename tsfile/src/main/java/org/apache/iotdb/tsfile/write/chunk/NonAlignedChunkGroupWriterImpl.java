@@ -161,7 +161,7 @@ public class NonAlignedChunkGroupWriterImpl implements IChunkGroupWriter {
   }
 
   /** seal all the chunks which may has un-sealed pages in force. */
-  private void sealAllChunks() {
+  public void sealAllChunks() {
     for (IChunkWriter writer : chunkWriters.values()) {
       writer.sealCurrentPage();
     }
@@ -185,5 +185,14 @@ public class NonAlignedChunkGroupWriterImpl implements IChunkGroupWriter {
 
   public void setLastTimeMap(Map<String, Long> lastTimeMap) {
     this.lastTimeMap = lastTimeMap;
+  }
+
+  /**
+   * get internal chunk writer
+   *
+   * @return map measurement -> chunk writer
+   */
+  public Map<String, ChunkWriterImpl> getChunkWriters() {
+    return chunkWriters;
   }
 }
